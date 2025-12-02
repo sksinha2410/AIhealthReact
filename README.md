@@ -1,6 +1,6 @@
 # AI-Based Health News Curator
 
-A React-based health news aggregator prototype that demonstrates AI-powered summaries and simplified content for busy readers. The application showcases the architecture and user experience for integrating AI summarization services.
+A React-based health news aggregator that fetches real health news from the internet and provides AI-powered summaries and simplified content for busy readers.
 
 ## 1. Project Setup & Demo
 
@@ -19,6 +19,23 @@ npm start
 ```
 
 The application will open at [http://localhost:3000](http://localhost:3000).
+
+### Configuring Live News Feed
+
+To fetch real health news from the internet, you need to configure a News API key:
+
+1. Get a free API key from [NewsAPI.org](https://newsapi.org/)
+2. Create a `.env` file in the project root (copy from `.env.example`):
+   ```bash
+   cp .env.example .env
+   ```
+3. Add your API key to the `.env` file:
+   ```
+   REACT_APP_NEWS_API_KEY=your_api_key_here
+   ```
+4. Restart the development server
+
+Without an API key, the application will use sample data for demonstration purposes.
 
 ### Available Scripts
 
@@ -41,10 +58,11 @@ Users are overwhelmed by the volume of health news available online. Reading ful
 
 ### Solution
 An AI-powered health news curator that:
-- Aggregates health news from various sources
+- Fetches real health news from the internet via News API
 - Provides AI-generated TL;DR summaries and key takeaways
 - Simplifies complex medical content for easy understanding
 - Allows users to regenerate summaries for different perspectives
+- Falls back to sample data when API is not configured
 
 ### Assumptions
 - Users prefer quick summaries over reading full articles
@@ -83,9 +101,10 @@ src/
 │   ├── ArticleDetail.js   # Full article view with simplified/original toggle
 │   └── LoadingSpinner.js  # Reusable loading indicator
 ├── services/
+│   ├── newsService.js     # Service for fetching health news from the internet
 │   └── aiSummaryService.js # AI service for generating summaries and simplified content
 ├── data/
-│   └── mockNewsData.js    # Mock health news data
+│   └── mockNewsData.js    # Fallback mock health news data
 └── styles/
     ├── App.css
     ├── NewsFeed.css
@@ -102,6 +121,7 @@ src/
 | `NewsFeed.js` | Displays article list with pagination and pull-to-refresh functionality |
 | `NewsCard.js` | Shows article preview with AI-generated TL;DR and key takeaways |
 | `ArticleDetail.js` | Modal view for full article with simplified/original content toggle |
+| `newsService.js` | Fetches real health news from the internet using News API |
 | `aiSummaryService.js` | Handles all AI-related operations (summarization, simplification) |
 
 ### State Management
@@ -120,6 +140,7 @@ src/
 4. **Article Detail Modal** - Full article view with simplified/original toggle
 5. **Pull-to-Refresh** - Mobile-friendly refresh gesture
 6. **Load More** - Pagination for additional articles
+7. **Live News Indicator** - Shows whether displaying live or sample data
 
 *Note: Run `npm start` and capture screenshots of the application screens listed above.*
 
@@ -128,11 +149,13 @@ src/
 ## 6. Known Issues / Improvements
 
 ### Known Issues
-- AI summaries currently use mock data for demonstration purposes (ready for integration with a real AI service)
+- News API free tier only works in development mode (requires paid plan for production)
+- AI summaries currently use simulated AI for demonstration purposes (ready for integration with a real AI service)
 - Pull-to-refresh gesture may not work on all desktop browsers
 - Images may fail to load if external URLs are unavailable
 
 ### Potential Improvements
+- Integrate with additional news sources for broader coverage
 - Integrate with a real AI service (OpenAI, Claude, etc.) for dynamic summaries
 - Add user preferences for summary length and complexity
 - Implement article bookmarking and sharing functionality
@@ -146,6 +169,8 @@ src/
 ## 7. Bonus Work
 
 ### Implemented Features
+- **Live News Fetching** - Fetches real health news from the internet via News API
+- **Fallback Mode** - Graceful fallback to sample data when API is not configured
 - **Pull-to-Refresh** - Mobile-friendly gesture for refreshing content
 - **Lazy Loading** - Images load on-demand for better performance
 - **Responsive Design** - Works seamlessly on desktop and mobile devices
@@ -165,3 +190,4 @@ src/
 
 - [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started)
 - [React Documentation](https://reactjs.org/)
+- [News API Documentation](https://newsapi.org/docs)

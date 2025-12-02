@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { simplifyArticle, regenerateSimplifiedContent } from '../services/aiSummaryService';
 import LoadingSpinner from './LoadingSpinner';
 import './ArticleDetail.css';

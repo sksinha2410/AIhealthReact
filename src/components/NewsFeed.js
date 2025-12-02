@@ -1,11 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import mockNewsArticles from '../data/mockNewsData';
+import { fetchHealthNews } from '../services/newsService';
 import NewsCard from './NewsCard';
 import ArticleDetail from './ArticleDetail';
 import LoadingSpinner from './LoadingSpinner';
 import './NewsFeed.css';
 
 const ITEMS_PER_PAGE = 4;
+
+// Helper function to format time ago
+const formatTimeAgo = (date) => {
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+  if (diffSeconds < 60) return 'just now';
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  return date.toLocaleDateString();
+};
 
 const NewsFeed = () => {
   const [articles, setArticles] = useState([]);
@@ -18,6 +32,8 @@ const NewsFeed = () => {
   const [pullStartY, setPullStartY] = useState(null);
   const [pullDistance, setPullDistance] = useState(0);
   const [isPulling, setIsPulling] = useState(false);
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   // Load initial articles
   useEffect(() => {
@@ -32,24 +48,36 @@ const NewsFeed = () => {
 
   const loadArticles = async () => {
     setLoading(true);
-    // Simulate API loading delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setArticles([...mockNewsArticles]);
-    setCurrentPage(1);
-    setLoading(false);
+    try {
+      // Fetch health news from the internet (with fallback to mock data)
+      const result = await fetchHealthNews({ pageSize: 20 });
+      setArticles(result.articles);
+      setIsUsingMockData(result.isUsingMockData);
+      setLastUpdated(new Date());
+      setCurrentPage(1);
+    } catch (error) {
+      console.error('Error loading articles:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRefresh = useCallback(async () => {
     if (refreshing) return;
     setRefreshing(true);
-    // Simulate refresh delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    // Shuffle articles to simulate new content
-    const shuffled = [...mockNewsArticles].sort(() => Math.random() - 0.5);
-    setArticles(shuffled);
-    setCurrentPage(1);
-    setRefreshing(false);
-    setPullDistance(0);
+    try {
+      // Fetch fresh health news from the internet
+      const result = await fetchHealthNews({ pageSize: 20 });
+      setArticles(result.articles);
+      setIsUsingMockData(result.isUsingMockData);
+      setLastUpdated(new Date());
+      setCurrentPage(1);
+    } catch (error) {
+      console.error('Error refreshing articles:', error);
+    } finally {
+      setRefreshing(false);
+      setPullDistance(0);
+    }
   }, [refreshing]);
 
   const loadMoreArticles = async () => {
@@ -143,16 +171,29 @@ const NewsFeed = () => {
             <span className="header-icon">🏥</span>
             Health News Daily
           </h1>
-          <p className="header-subtitle">AI-powered summaries for busy lives</p>
+          <p className="header-subtitle">
+            {isUsingMockData 
+              ? 'AI-powered summaries (Demo Mode)' 
+              : 'Live health news with AI-powered summaries'}
+          </p>
         </div>
         <button 
           className={`refresh-button ${refreshing ? 'spinning' : ''}`}
           onClick={handleRefresh}
           disabled={refreshing}
+          title="Refresh news from internet"
         >
           ↻
         </button>
       </header>
+
+      {/* Data source indicator */}
+      {isUsingMockData && (
+        <div className="data-source-notice">
+          <span className="notice-icon">ℹ️</span>
+          <span>Using sample data. Add REACT_APP_NEWS_API_KEY to fetch live news.</span>
+        </div>
+      )}
 
       {/* Articles count */}
       <div className="articles-info">
@@ -160,7 +201,9 @@ const NewsFeed = () => {
           Showing {displayedArticles.length} of {articles.length} articles
         </span>
         <span className="last-updated">
-          Updated just now
+          {lastUpdated 
+            ? `Updated ${formatTimeAgo(lastUpdated)}` 
+            : 'Updated just now'}
         </span>
       </div>
 
