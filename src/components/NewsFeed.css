@@ -124,6 +124,23 @@
   font-size: 0.85rem;
 }
 
+/* Data source notice */
+.data-source-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  color: #e65100;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(230, 81, 0, 0.1);
+}
+
+.data-source-notice .notice-icon {
+  font-size: 1rem;
+}
+
 .article-count {
   color: #666;
   font-weight: 500;
