@@ -7,19 +7,59 @@ import mockNewsArticles from '../data/mockNewsData';
 const NEWS_API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
 
+// Health categories with associated keywords for classification
+const HEALTH_CATEGORIES = {
+  'Nutrition': ['diet', 'food', 'nutrition', 'eating', 'meal', 'vitamin', 'protein', 'carb', 'fat', 'calorie', 'mediterranean', 'vegetable', 'fruit'],
+  'Research': ['study', 'research', 'scientist', 'breakthrough', 'discovery', 'trial', 'clinical', 'laboratory', 'experiment'],
+  'Sleep': ['sleep', 'insomnia', 'rest', 'fatigue', 'tired', 'circadian', 'melatonin', 'nap'],
+  'Mental Health': ['mental', 'anxiety', 'depression', 'stress', 'therapy', 'psychological', 'mindfulness', 'meditation', 'brain', 'cognitive'],
+  'Fitness': ['exercise', 'workout', 'fitness', 'gym', 'training', 'muscle', 'cardio', 'running', 'strength', 'athletic'],
+  'Chronic Conditions': ['diabetes', 'heart', 'cancer', 'chronic', 'disease', 'condition', 'arthritis', 'hypertension', 'cholesterol'],
+  'Digestive Health': ['gut', 'digestive', 'stomach', 'intestine', 'microbiome', 'probiotic', 'fiber'],
+  'Preventive Care': ['vaccine', 'prevention', 'screening', 'checkup', 'immunization', 'preventive', 'health check']
+};
+
+// Determine category based on article content keywords
+const determineCategory = (article) => {
+  const textToAnalyze = `${article.title || ''} ${article.description || ''} ${article.content || ''}`.toLowerCase();
+  
+  let bestCategory = 'Research'; // Default category
+  let maxMatches = 0;
+  
+  for (const [category, keywords] of Object.entries(HEALTH_CATEGORIES)) {
+    const matches = keywords.filter(keyword => textToAnalyze.includes(keyword)).length;
+    if (matches > maxMatches) {
+      maxMatches = matches;
+      bestCategory = category;
+    }
+  }
+  
+  return bestCategory;
+};
+
+// Generate a unique ID for an article based on its URL or title
+const generateArticleId = (article, index) => {
+  // Use a hash of the URL or title for a more stable ID
+  const baseString = article.url || article.title || `article-${index}`;
+  let hash = 0;
+  for (let i = 0; i < baseString.length; i++) {
+    const char = baseString.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+};
+
 // Transform News API response to our article format
 const transformNewsApiArticle = (article, index) => {
-  const categories = ['Nutrition', 'Research', 'Sleep', 'Mental Health', 'Fitness', 'Chronic Conditions', 'Digestive Health', 'Preventive Care'];
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-  
   return {
-    id: index + 1,
+    id: generateArticleId(article, index),
     title: article.title || 'Health News',
     source: article.source?.name || 'Health News',
     publishedAt: article.publishedAt || new Date().toISOString(),
     imageUrl: article.urlToImage || `https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=400`,
     originalContent: article.content || article.description || 'Read the full article for more details.',
-    category: randomCategory,
+    category: determineCategory(article),
     url: article.url,
     description: article.description,
     author: article.author
