@@ -1,0 +1,384 @@
+.article-detail-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.article-detail-modal {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.article-detail-header {
+  padding-bottom: 1rem;
+}
+
+.article-detail-image {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.article-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-category {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.article-source {
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+.article-date {
+  color: #888;
+}
+
+.article-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.3;
+  padding: 1rem 1.5rem;
+  margin: 0;
+}
+
+.view-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1.5rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.toggle-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 12px 16px;
+  background: #f5f5f5;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-button:hover:not(.active) {
+  background: #eee;
+}
+
+.toggle-button.active {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-color: #4CAF50;
+  color: #2E7D32;
+}
+
+.toggle-icon {
+  font-size: 1.1rem;
+}
+
+.article-content {
+  padding: 1.5rem;
+  min-height: 300px;
+}
+
+.content-error {
+  text-align: center;
+  padding: 2rem;
+  color: #e53935;
+}
+
+.content-error .retry-button {
+  margin-top: 1rem;
+  padding: 10px 24px;
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.content-error .retry-button:hover {
+  background: #c62828;
+}
+
+.simplified-badge,
+.original-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.simplified-badge {
+  background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+  color: #1565C0;
+}
+
+.original-badge {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.badge-icon {
+  font-size: 1rem;
+}
+
+.simplified-content {
+  line-height: 1.7;
+}
+
+.content-header {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.content-header:first-child {
+  margin-top: 0;
+}
+
+.content-paragraph {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.content-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.content-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.content-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.original-content {
+  line-height: 1.8;
+}
+
+.original-paragraph {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+  text-align: justify;
+}
+
+.regenerate-content-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 2rem;
+  background: transparent;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.regenerate-content-button:hover:not(:disabled) {
+  border-color: #2196F3;
+  color: #2196F3;
+  background: rgba(33, 150, 243, 0.05);
+}
+
+.regenerate-content-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.regenerate-content-button.regenerating {
+  border-style: solid;
+  border-color: #2196F3;
+  color: #2196F3;
+}
+
+.regenerate-content-button .regenerate-icon {
+  font-size: 1.1rem;
+}
+
+.regenerate-content-button .regenerate-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #2196F3;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scrollbar styling */
+.article-detail-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.article-detail-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.article-detail-modal::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.article-detail-modal::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .article-detail-backdrop {
+    padding: 0;
+  }
+  
+  .article-detail-modal {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .article-detail-image {
+    height: 200px;
+    border-radius: 0;
+  }
+  
+  .article-title {
+    font-size: 1.4rem;
+    padding: 1rem;
+  }
+  
+  .article-meta {
+    padding: 1rem 1rem 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .view-mode-toggle {
+    padding: 0 1rem 1rem;
+  }
+  
+  .article-content {
+    padding: 1rem;
+  }
+}
